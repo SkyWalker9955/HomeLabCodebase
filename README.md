@@ -16,6 +16,9 @@ Each project is self-contained and can be deployed independently.
       /deploy
     /project-b
       ...
+    /PostgreSql
+      /migrations
+      /scripts
   /shared
 ```
 
@@ -24,3 +27,9 @@ Each project is self-contained and can be deployed independently.
 Each project has its own *.sln solution within its folder, including shared libraries.
 
 For common types used across projects, see `shared/Types`.
+
+The `PostgreSql` project stores database migrations and scripts such as
+`install-postgres.sh` for installing PostgreSQL on Ubuntu.
+A docker-compose file allows running PostgreSQL in a container.
+
+
