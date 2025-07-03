@@ -1,0 +1,10 @@
+# Ignore build outputs
+bin/
+obj/
+**/bin/
+**/obj/
+# user-specific files
+*.user
+*.suo
+# Visual Studio Code
+.vscode/
