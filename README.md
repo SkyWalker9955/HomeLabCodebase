@@ -27,6 +27,7 @@ Each project is self-contained and can be deployed independently.
 Each project has its own *.sln solution within its folder, including shared libraries.
 
 For common types used across projects, see `shared/Types`.
+For shared business logic, see `shared/Domain`.
 
 The `PostgreSql` project stores database migrations and scripts such as
 `install-postgres.sh` for installing PostgreSQL on Ubuntu.
