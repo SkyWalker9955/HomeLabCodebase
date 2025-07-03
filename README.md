@@ -20,3 +20,7 @@ Each project is self-contained and can be deployed independently.
 ```
 
 `/projects` holds separately deployable domains. Shared libraries or utilities should reside under `/shared`.
+
+Each project has its own *.sln solution within its folder, including shared libraries.
+
+For common types used across projects, see `shared/Types`.
