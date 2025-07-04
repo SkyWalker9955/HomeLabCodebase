@@ -8,3 +8,4 @@ obj/
 *.suo
 # Visual Studio Code
 .vscode/
+Client/node_modules/
