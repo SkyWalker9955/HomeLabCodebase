@@ -1,37 +1,16 @@
 # HomeLab Codebase
 
-This repository contains multiple projects organized using Domain-Driven Design (DDD) principles.
-Each project is self-contained and can be deployed independently.
+This repository demonstrates a very small layered setup using .NET 9.0. The root directory contains the following solutions:
 
 ```
 /<root>
-  /projects
-    /project-a
-      /domain
-      /application
-      /infrastructure
-      /interface
-      /tests
-      Dockerfile
-      /deploy
-    /project-b
-      ...
-    /PostgreSql
-      /migrations
-      /scripts
-  /shared
+  /WebApi
+  /Domain
+  /Infrastructure
+  /Application
+  /Shared
 ```
 
-`/projects` holds separately deployable domains. Shared libraries or utilities should reside under `/shared`.
+`WebApi` exposes the HTTP API and references the `Application`, `Infrastructure`, `Domain` and `Shared` libraries. Each of the library folders contains its own `.sln` file along with a matching `*.Test` project for unit tests.
 
-Each project has its own *.sln solution within its folder, including shared libraries.
-
-Common code lives under the `shared` solution. Open `shared/Shared.sln` to work
-with the `Shared` library and its tests. The `Shared` project exposes a
-`Types` folder that provides reusable primitives.
-
-The `PostgreSql` project stores database migrations and scripts such as
-`install-postgres.sh` for installing PostgreSQL on Ubuntu.
-A docker-compose file allows running PostgreSQL in a container.
-
-
+Common primitives live in the `Shared` project. Open `Shared/Shared.sln` to work with the shared library and its tests.
