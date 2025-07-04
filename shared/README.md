@@ -2,8 +2,11 @@
 
 Common utilities and shared code used across multiple projects.
 
-## Types library
+## Shared solution
 
-`Types` is a .NET class library targeting **net9.0**. It currently provides
-a simple `Result` record that projects can use to represent success or failure
-outcomes.
+`Shared.sln` groups together two projects:
+
+- `Shared` - a .NET class library targeting **net9.0**. All shared primitives
+  reside under the `Types` folder of this project (e.g. the `Result` record and
+  money abstractions).
+- `Shared.Test` - xUnit tests for the library.

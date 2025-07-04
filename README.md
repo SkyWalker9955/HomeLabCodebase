@@ -26,7 +26,9 @@ Each project is self-contained and can be deployed independently.
 
 Each project has its own *.sln solution within its folder, including shared libraries.
 
-For common types used across projects, see `shared/Types`.
+Common code lives under the `shared` solution. Open `shared/Shared.sln` to work
+with the `Shared` library and its tests. The `Shared` project exposes a
+`Types` folder that provides reusable primitives.
 
 The `PostgreSql` project stores database migrations and scripts such as
 `install-postgres.sh` for installing PostgreSQL on Ubuntu.

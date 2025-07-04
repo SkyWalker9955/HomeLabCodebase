@@ -1,7 +1,7 @@
 using Types.Money;
 using MoneyValue = Types.Money.Money;
 
-namespace Types.Test.Money;
+namespace Shared.Test.Money;
 
 public class MoneyTest
 {
