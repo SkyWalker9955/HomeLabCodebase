@@ -17,4 +17,15 @@
     <ProjectReference Include="../Shared/Shared/Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="6.0.1" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\Shared\Shared\Logging\nlog.config" Link="nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
