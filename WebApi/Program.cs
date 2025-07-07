@@ -1,4 +1,3 @@
-using NLog;
 using NLog.Web;
 
 var logger = NLog.LogManager.GetCurrentClassLogger();
@@ -33,7 +32,6 @@ try
             .ToArray();
         return forecast;
     });
-
     app.Run();
 }
 catch (Exception ex)
