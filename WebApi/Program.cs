@@ -1,6 +1,9 @@
+using NLog;
 using NLog.Web;
 
-
+var logger = NLog.LogManager.GetCurrentClassLogger();
+try
+{
     var builder = WebApplication.CreateBuilder(args);
 
     builder.Logging.ClearProviders();
@@ -14,7 +17,8 @@ using NLog.Web;
 
     var summaries = new[]
     {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot",
+        "Sweltering", "Scorching"
     };
 
     app.MapGet("/weatherforecast", () =>
@@ -31,6 +35,16 @@ using NLog.Web;
     });
 
     app.Run();
+}
+catch (Exception ex)
+{
+    logger.Error(ex, "Stopped program because of exception");
+    throw;
+}
+finally
+{
+    NLog.LogManager.Shutdown();
+}
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
