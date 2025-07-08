@@ -1,10 +1,20 @@
 using NLog.Web;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var logger = NLog.LogManager.GetCurrentClassLogger();
 try
 {
     var builder = WebApplication.CreateBuilder(args);
 
+    // OpenTelemetry for traces and metrics only
+    builder.Services.AddOpenTelemetry()
+        .ConfigureResource(r => r.AddService("HomeLabCodebase"))
+        .WithTracing(t => t.AddAspNetCoreInstrumentation().AddConsoleExporter())
+        .WithMetrics(m => m.AddAspNetCoreInstrumentation().AddConsoleExporter());
+    
+    // NLog 
     builder.Logging.ClearProviders();
     builder.Host.UseNLog();
 
@@ -23,7 +33,7 @@ try
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot",
         "Sweltering", "Scorching"
     };
-
+    
     app.MapGet("/weatherforecast", () =>
     {
         var forecast = Enumerable.Range(1, 5).Select(index =>
