@@ -1,2 +1,2 @@
 This directory stores SQL migration files executed when the PostgreSQL container starts.
-Place initialization scripts such as table creation statements here.
+You can also apply them manually using `psql -f <file>` if running a local database.
