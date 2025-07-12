@@ -14,6 +14,17 @@ By default the application listens on **http://localhost:5066**. Open <http://lo
 
 Traces and metrics are exported to the console. Application logs are produced through NLog using `Shared/Logging/nlog.config`.
 
+## Docker
+
+You can also run the API in a container:
+
+```bash
+docker build -f WebApi/Dockerfile -t homelab-api .
+docker run -p 8080:8080 homelab-api
+```
+
+The service listens on port **8080** inside the container.
+
 ## Tests
 
 The `WebApi.sln` groups the API project and its `WebApi.Test` unit tests. Run tests with:

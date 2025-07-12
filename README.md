@@ -29,6 +29,17 @@ dotnet run --project WebApi
 
 Browse to <http://localhost:5066/swagger> to inspect the API via Swagger UI. Traces and metrics are exported to the console and NLog writes application logs using `Shared/Logging/nlog.config`.
 
+### Docker
+
+Build and run the API in a container from the repository root:
+
+```bash
+docker build -f WebApi/Dockerfile -t homelab-api .
+docker run -p 8080:8080 homelab-api
+```
+
+The application listens on port **8080** inside the container.
+
 ## Database Logging Setup
 
 `PostgreSql/migrations` provides scripts for creating the logging and key vault databases. Apply them with `psql`:
