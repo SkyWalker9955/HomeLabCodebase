@@ -1,6 +1,6 @@
 # HomeLab Codebase
 
-This repository demonstrates a small layered setup using .NET 9.0. The root directory contains the following solutions:
+This repository demonstrates a small layered setup using .NET 9.0. The root directory contains the following projects:
 
 ```
 /<root>
@@ -13,11 +13,11 @@ This repository demonstrates a small layered setup using .NET 9.0. The root dire
   /PostgreSql
 ```
 
-`WebApi` exposes the HTTP API and references the `Application`, `Infrastructure`, `Domain` and `Shared` libraries. Each library folder contains its own `.sln` file along with a matching `*.Test` project for unit tests.
+`WebApi` exposes the HTTP API and references the `Application`, `Infrastructure`, `Domain` and `Shared` libraries. Each of these library folders contains its own `.sln` file along with a matching `*.Test` project for unit tests.
 
 Common primitives live in the `Shared` project. Open `Shared/Shared.sln` to work with the shared library and its tests.
 
-`Client` hosts a SvelteKit front end that can interact with the API exposed by `WebApi`.
+`Client` hosts a SvelteKit front end, and `PostgreSql` holds SQL migration scripts.
 
 ## Running the API
 
@@ -27,7 +27,7 @@ Start the web service from the repository root:
 dotnet run --project WebApi
 ```
 
-Browse to <http://localhost:5066/swagger> to inspect the API via Swagger UI. Traces and metrics are exported to the console and NLog writes application logs using `Shared/Logging/nlog.config`.
+Browse to <http://localhost:5066/swagger> to inspect the API via Swagger UI. Traces and metrics are exported to the console and NLog writes application logs using `Shared/Shared/Logging/nlog.config`.
 
 ### Docker
 
