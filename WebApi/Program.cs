@@ -22,11 +22,21 @@ try
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
+    // Allow cross-origin requests from the client
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+            policy.AllowAnyOrigin()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod());
+    });
+
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors();
 
     var summaries = new[]
     {
