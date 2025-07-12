@@ -17,7 +17,7 @@ This repository demonstrates a small layered setup using .NET 9.0. The root dire
 
 Common primitives live in the `Shared` project. Open `Shared/Shared.sln` to work with the shared library and its tests.
 
-`Client` contains a small TypeScript application that uses Axios to retrieve the `/weatherforecast` endpoint exposed by `WebApi`.
+`Client` hosts a SvelteKit front end that can interact with the API exposed by `WebApi`.
 
 ## Running the API
 
@@ -40,15 +40,19 @@ psql -U postgres -f PostgreSql/migrations/002_create_keyvault_db.sql
 
 ## Running the Client
 
-Install dependencies and build the TypeScript project:
+Install dependencies and start the development server:
 
 ```bash
 cd Client
 npm install
-npm run build
-npm start
+npm run dev
 ```
 
-Open <http://localhost:8080> to view the client application.
+Open <http://localhost:5173> to view the client application.
 
-Alternatively the [Client/README.md](Client/README.md) explains how to run it in Docker.
+To create a production build run:
+
+```bash
+npm run build
+npm run preview
+```
