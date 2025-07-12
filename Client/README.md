@@ -22,3 +22,14 @@ Create an optimized production build and preview it locally:
 npm run build
 npm run preview
 ```
+
+## Running with Docker
+
+Build the container image and start the app using Docker:
+
+```bash
+docker build -t homelab-client .
+docker run -p 4173:4173 homelab-client
+```
+
+Navigate to <http://localhost:4173> to view the application.
