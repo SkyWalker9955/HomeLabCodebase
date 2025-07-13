@@ -1,143 +1,79 @@
--- Creates general purpose log databases and a dedicated user.
--- Adjust the password before executing in production environments.
-
 -- Create dedicated user
 CREATE USER log_user WITH PASSWORD 'ChangeMe';
 
--- Databases for runtime and startup logs
+-- Create log database
 CREATE DATABASE logdb;
-CREATE DATABASE startup_logdb;
-
 GRANT ALL PRIVILEGES ON DATABASE logdb TO log_user;
-GRANT ALL PRIVILEGES ON DATABASE startup_logdb TO log_user;
 
-\c logdb
+-- After connecting to logdb manually or in script
+-- All tables reside in the default `public` schema
 
--- Store log providers
+--
+-- Lookup Tables
+--
+
+-- Providers: identifies external sources of logs
 CREATE TABLE IF NOT EXISTS providers (
     id SERIAL PRIMARY KEY,
     name TEXT UNIQUE NOT NULL
 );
 
--- Log tables by level
-CREATE TABLE IF NOT EXISTS traces (
-    id SERIAL PRIMARY KEY,
-    provider_id INT REFERENCES providers(id),
-    logged TIMESTAMPTZ NOT NULL,
-    logger VARCHAR(250),
-    message TEXT,
-    exception TEXT
-);
-
-CREATE TABLE IF NOT EXISTS debugs (
-    id SERIAL PRIMARY KEY,
-    provider_id INT REFERENCES providers(id),
-    logged TIMESTAMPTZ NOT NULL,
-    logger VARCHAR(250),
-    message TEXT,
-    exception TEXT
-);
-
-CREATE TABLE IF NOT EXISTS infos (
-    id SERIAL PRIMARY KEY,
-    provider_id INT REFERENCES providers(id),
-    logged TIMESTAMPTZ NOT NULL,
-    logger VARCHAR(250),
-    message TEXT,
-    exception TEXT
-);
-
-CREATE TABLE IF NOT EXISTS warnings (
-    id SERIAL PRIMARY KEY,
-    provider_id INT REFERENCES providers(id),
-    logged TIMESTAMPTZ NOT NULL,
-    logger VARCHAR(250),
-    message TEXT,
-    exception TEXT
-);
-
-CREATE TABLE IF NOT EXISTS errors (
-    id SERIAL PRIMARY KEY,
-    provider_id INT REFERENCES providers(id),
-    logged TIMESTAMPTZ NOT NULL,
-    logger VARCHAR(250),
-    message TEXT,
-    exception TEXT
-);
-
-CREATE TABLE IF NOT EXISTS fatals (
-    id SERIAL PRIMARY KEY,
-    provider_id INT REFERENCES providers(id),
-    logged TIMESTAMPTZ NOT NULL,
-    logger VARCHAR(250),
-    message TEXT,
-    exception TEXT
-);
-
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO log_user;
-
---
--- Startup log database
---
-\c startup_logdb
-
-CREATE TABLE IF NOT EXISTS providers (
+-- Log levels: trace, debug, info, etc.
+CREATE TABLE IF NOT EXISTS log_levels (
     id SERIAL PRIMARY KEY,
     name TEXT UNIQUE NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS traces (
+-- Log sources: replaces separate schemas
+CREATE TABLE IF NOT EXISTS sources (
+    id SERIAL PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL
+);
+
+--
+-- Unified Logs Table
+--
+
+CREATE TABLE IF NOT EXISTS logs (
     id SERIAL PRIMARY KEY,
     provider_id INT REFERENCES providers(id),
+    log_level_id INT REFERENCES log_levels(id),
+    source_id INT REFERENCES sources(id),
     logged TIMESTAMPTZ NOT NULL,
     logger VARCHAR(250),
     message TEXT,
     exception TEXT
-);
+    );
 
-CREATE TABLE IF NOT EXISTS debugs (
-    id SERIAL PRIMARY KEY,
-    provider_id INT REFERENCES providers(id),
-    logged TIMESTAMPTZ NOT NULL,
-    logger VARCHAR(250),
-    message TEXT,
-    exception TEXT
-);
+--
+-- Seed Data
+--
 
-CREATE TABLE IF NOT EXISTS infos (
-    id SERIAL PRIMARY KEY,
-    provider_id INT REFERENCES providers(id),
-    logged TIMESTAMPTZ NOT NULL,
-    logger VARCHAR(250),
-    message TEXT,
-    exception TEXT
-);
+INSERT INTO log_levels (name) VALUES
+    ('Trace'), ('Debug'), ('Info'), ('Warning'), ('Error'), ('Fatal')
+    ON CONFLICT (name) DO NOTHING;
 
-CREATE TABLE IF NOT EXISTS warnings (
-    id SERIAL PRIMARY KEY,
-    provider_id INT REFERENCES providers(id),
-    logged TIMESTAMPTZ NOT NULL,
-    logger VARCHAR(250),
-    message TEXT,
-    exception TEXT
-);
+INSERT INTO sources (name) VALUES
+    ('runtime'), ('startup')
+    ON CONFLICT (name) DO NOTHING;
 
-CREATE TABLE IF NOT EXISTS errors (
-    id SERIAL PRIMARY KEY,
-    provider_id INT REFERENCES providers(id),
-    logged TIMESTAMPTZ NOT NULL,
-    logger VARCHAR(250),
-    message TEXT,
-    exception TEXT
-);
+--
+-- Indexes
+--
 
-CREATE TABLE IF NOT EXISTS fatals (
-    id SERIAL PRIMARY KEY,
-    provider_id INT REFERENCES providers(id),
-    logged TIMESTAMPTZ NOT NULL,
-    logger VARCHAR(250),
-    message TEXT,
-    exception TEXT
-);
+CREATE INDEX IF NOT EXISTS idx_logs_logged     ON logs(logged);
+CREATE INDEX IF NOT EXISTS idx_logs_level      ON logs(log_level_id);
+CREATE INDEX IF NOT EXISTS idx_logs_provider   ON logs(provider_id);
+CREATE INDEX IF NOT EXISTS idx_logs_source     ON logs(source_id);
 
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO log_user;
+--
+-- Privileges
+--
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO log_user;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO log_user;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT USAGE, SELECT ON SEQUENCES TO log_user;
