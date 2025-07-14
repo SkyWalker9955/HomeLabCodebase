@@ -12,7 +12,7 @@ dotnet run --project WebApi
 
 By default the application listens on **http://localhost:5066**. Open <http://localhost:5066/swagger> to explore the Swagger UI.
 
-Traces and metrics are exported to the console. Application logs are produced through NLog using `Shared/Logging/nlog.config`.
+Traces and metrics are exported to the console. Application logs are produced through NLog using `Shared/Shared/Logging/nlog.config`.
 
 ## Docker
 
